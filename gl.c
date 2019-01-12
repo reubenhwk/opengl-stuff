@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
+int mrfont_init(void);
+
 int main(void)
 {
     GLFWwindow* window;
@@ -32,14 +34,15 @@ int main(void)
         , glGetString(GL_SHADING_LANGUAGE_VERSION)
     );
 
+    glClearColor(0, 1, 0, 0);
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glColor3f(1, 1, 1);
-        glVertex3f(0, 0, -1);
+        mrfont_init();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
