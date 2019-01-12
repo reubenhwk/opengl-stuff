@@ -1,5 +1,7 @@
 
 #include <stdio.h>
+#include <unistd.h>
+
 #include <GLFW/glfw3.h>
 
 int mrfont_init(void);
@@ -34,7 +36,7 @@ int main(void)
         , glGetString(GL_SHADING_LANGUAGE_VERSION)
     );
 
-    glClearColor(0, 1, 0, 0);
+    glClearColor(0, 0, 0, 0);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

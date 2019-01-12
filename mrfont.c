@@ -8,7 +8,8 @@
 //#define FONT_PATH "/usr/share/fonts/dejavu/DejaVuSans.ttf"
 #define FONT_PATH "/usr/share/fonts/opentype/stix/STIXGeneral-Regular.otf"
 
-void mrfont_glyph_draw(FT_GlyphSlot glyph, GLuint texture);
+void mrfont_string_draw(int x, int y, FT_Face face, char const *str);
+int mrfont_glyph_draw(int x, int y, FT_GlyphSlot glyph, GLuint texture);
 void mrfont_glyph_render(FT_Face face, int c);
 GLuint mrfont_glyph_to_texture(FT_Bitmap const *bitmap);
 
@@ -36,17 +37,27 @@ int mrfont_init(void)
     }
 
     /* Set the char size. */
-    FT_Set_Pixel_Sizes(face, 60, 30);
+    FT_Set_Pixel_Sizes(face, 0, 30);
     if (error) {
         fprintf(stderr, "ERROR: Unable set char size, exiting.\n");
         exit(1);
     }
 
-    mrfont_glyph_render(face, 66);
-    GLuint texture = mrfont_glyph_to_texture(&face->glyph->bitmap);
-    mrfont_glyph_draw(face->glyph, texture);
+    mrfont_string_draw(10, 200, face, "Hello World!!!");
+    mrfont_string_draw(10, 150, face, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    mrfont_string_draw(10, 100, face, "abcdefghijklmnopqrstuvwxyz");
 
     return 0;
+}
+
+void mrfont_string_draw(int x, int y, FT_Face face, char const *str)
+{
+    for (int i = 0; i < strlen(str); ++i) {
+        mrfont_glyph_render(face, (int)str[i]);
+        GLuint texture = mrfont_glyph_to_texture(&face->glyph->bitmap);
+        x += mrfont_glyph_draw(x, y, face->glyph, texture);
+        glDeleteTextures(1, &texture);
+    }
 }
 
 void mrfont_glyph_render(FT_Face face, int c)
@@ -97,21 +108,36 @@ GLuint mrfont_glyph_to_texture(FT_Bitmap const *bitmap)
     return texture;
 }
 
-void mrfont_glyph_draw(FT_GlyphSlot glyph, GLuint texture)
+int mrfont_glyph_draw(int x, int y, FT_GlyphSlot glyph, GLuint texture)
 {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-10, 630, -10, 470, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(x, y, 0);
+
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    glBegin(GL_QUADS);
-    glTexCoord2f(0, 1);
-    glVertex2f(0, 0);
-    glTexCoord2f(1, 1);
-    glVertex2f(.4, 0);
-    glTexCoord2f(1, 0);
-    glVertex2f(.4, .6);
-    glTexCoord2f(0, 0);
-    glVertex2f(0, .6);
-    glEnd();
+    float x0 = x + glyph->bitmap_left;
+    float y0 = y - (glyph->bitmap.rows - glyph->bitmap_top);
+    float x1 = x0 + glyph->bitmap.width;
+    float y1 = y0 + glyph->bitmap.rows;
+
+    glBegin(GL_QUADS);{
+        glTexCoord2f(0, 1);
+        glVertex2f(x0, y0);
+        glTexCoord2f(1, 1);
+        glVertex2f(x1, y0);
+        glTexCoord2f(1, 0);
+        glVertex2f(x1, y1);
+        glTexCoord2f(0, 0);
+        glVertex2f(x0, y1);
+    } glEnd();
+
+    return glyph->advance.x >> 7;
 }
 
 
