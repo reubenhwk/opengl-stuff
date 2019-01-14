@@ -1,4 +1,6 @@
 
+#include "mrfont.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl.h>
@@ -8,15 +10,20 @@
 //#define FONT_PATH "/usr/share/fonts/dejavu/DejaVuSans.ttf"
 #define FONT_PATH "/usr/share/fonts/opentype/stix/STIXGeneral-Regular.otf"
 
-void mrfont_string_draw(int x, int y, FT_Face face, char const *str);
+void mrfont_string_draw(int x, int y, char const *str);
 int mrfont_glyph_draw(int x, int y, FT_GlyphSlot glyph, GLuint texture);
 void mrfont_glyph_render(FT_Face face, int c);
 GLuint mrfont_glyph_to_texture(FT_Bitmap const *bitmap);
 
+FT_Face face = NULL;
+
 int mrfont_init(void)
 {
+    if (face) {
+        return 0;
+    }
+
     FT_Library library;
-    FT_Face face;
     int error;
 
     /* Initialize freetype. */
@@ -43,14 +50,10 @@ int mrfont_init(void)
         exit(1);
     }
 
-    mrfont_string_draw(10, 200, face, "Hello World!!!");
-    mrfont_string_draw(10, 150, face, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-    mrfont_string_draw(10, 100, face, "abcdefghijklmnopqrstuvwxyz");
-
     return 0;
 }
 
-void mrfont_string_draw(int x, int y, FT_Face face, char const *str)
+void mrfont_string_draw(int x, int y, char const *str)
 {
     for (int i = 0; i < strlen(str); ++i) {
         mrfont_glyph_render(face, (int)str[i]);

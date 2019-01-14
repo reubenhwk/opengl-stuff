@@ -8,7 +8,7 @@ LDFLAGS=
 LIBS=-lglfw -lGL
 LIBS+=$(shell pkg-config --libs freetype2)
 
-gl: gl.o mrfont.o
+gl: gl.o mrfont.o model.c
 	$(CC) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 %.o: %.c
