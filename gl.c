@@ -32,10 +32,10 @@ int main(void)
     struct model * text = new_model();
     model_insert_text(text, 10, 200, "Hello World!!!");
     model_insert_text(text, 10, 150, "Hello World");
-    model_insert_text(text, 10, 100, "Hello World");
 
     struct model * model = new_model();
     model_insert_submodel(model, text);
+    model_insert_text(model, 10, 100, "Hello World");
 
     GLFWwindow* window;
 
@@ -101,6 +101,8 @@ int main(void)
     }
 
     glfwTerminate();
+
+    free_model(model);
 
     return 0;
 }

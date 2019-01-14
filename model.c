@@ -57,3 +57,18 @@ out:
 
     return /* ERROR */;
 }
+
+void free_model(struct model * model)
+{
+    for (int i = 0; i < model->text_count; ++i) {
+        struct model_text * text = &model->text[i];
+        free(text->str);
+    }
+
+    for (int i = 0; i < model->submodel_count; ++i) {
+        free(model->submodels[i]);
+    }
+
+    free(model);
+}
+

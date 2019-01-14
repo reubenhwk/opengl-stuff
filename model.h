@@ -15,5 +15,6 @@ struct model {
 };
 
 struct model * new_model(void);
+void free_model(struct model * model);
 void model_insert_text(struct model * model, int x, int y, char const *str);
 void model_insert_submodel(struct model * model, struct model * submodel);
