@@ -21,15 +21,21 @@ void model_draw(struct model const * model)
         struct model_text * text = &model->text[i];
         model_draw_text(text->x, text->y, text->str);
     }
+
+    for (int i = 0; i < model->submodel_count; ++i) {
+        model_draw(model->submodels[i]);
+    }
 }
 
 int main(void)
 {
-    struct model * model = new_model();
+    struct model * text = new_model();
+    model_insert_text(text, 10, 200, "Hello World!!!");
+    model_insert_text(text, 10, 150, "Hello World");
+    model_insert_text(text, 10, 100, "Hello World");
 
-    model_insert_text(model, 10, 200, "Hello World!!!");
-    model_insert_text(model, 10, 150, "Hello World");
-    model_insert_text(model, 10, 100, "Hello World");
+    struct model * model = new_model();
+    model_insert_submodel(model, text);
 
     GLFWwindow* window;
 

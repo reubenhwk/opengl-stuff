@@ -7,9 +7,13 @@ struct model_text {
 };
 
 struct model {
+    struct model **submodels;
+    int submodel_count;
+
     struct model_text *text;
     int text_count;
 };
 
 struct model * new_model(void);
 void model_insert_text(struct model * model, int x, int y, char const *str);
+void model_insert_submodel(struct model * model, struct model * submodel);
