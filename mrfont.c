@@ -7,8 +7,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-//#define FONT_PATH "/usr/share/fonts/dejavu/DejaVuSans.ttf"
-#define FONT_PATH "/usr/share/fonts/opentype/stix/STIXGeneral-Regular.otf"
+#define FONT_PATH "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+//#define FONT_PATH "/usr/share/fonts/opentype/stix/STIXGeneral-Regular.otf"
 
 void mrfont_string_draw(int x, int y, char const *str);
 int mrfont_glyph_draw(int x, int y, FT_GlyphSlot glyph, GLuint texture);
@@ -59,6 +59,14 @@ void mrfont_string_draw(int x, int y, char const *str)
         mrfont_glyph_render(face, (int)str[i]);
         GLuint texture = mrfont_glyph_to_texture(&face->glyph->bitmap);
         x += mrfont_glyph_draw(x, y, face->glyph, texture);
+        if (FT_HAS_KERNING(face) && str[i+1] != '\0') {
+            FT_Vector kerning;
+            int left = FT_Get_Char_Index(face, (int)str[i]);
+            int right = FT_Get_Char_Index(face, (int)str[i+1]);
+            FT_Get_Kerning(face, left, right, FT_KERNING_DEFAULT, &kerning);
+            x += kerning.x >> 7;
+            printf("Kerning between %c and %c is %d\n", str[i], str[i+1], (int)kerning.x);
+        }
         glDeleteTextures(1, &texture);
     }
 }

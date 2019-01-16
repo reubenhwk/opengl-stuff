@@ -36,6 +36,7 @@ int main(void)
     struct model * model = new_model();
     model_insert_submodel(model, text);
     model_insert_text(model, 10, 100, "Hello World");
+    model->color = (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 1}};
 
     GLFWwindow* window;
 
