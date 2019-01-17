@@ -29,12 +29,16 @@ void model_draw(struct model const * model)
 
 int main(void)
 {
-    struct model * text = new_model();
-    model_insert_text(text, 10, 200, "Hello World!!!");
-    model_insert_text(text, 10, 150, "Hello World");
+    struct model * text1 = new_model();
+    model_insert_text(text1, 10, 175, "BRAVO");
+
+    struct model * text2 = new_model();
+    model_insert_text(text2, 10, 200, "Hello World!!!");
+    model_insert_text(text2, 10, 150, "Hello World");
 
     struct model * model = new_model();
-    model_insert_submodel(model, text);
+    model_insert_submodel(model, text1);
+    model_insert_submodel(model, text2);
     model_insert_text(model, 10, 100, "Hello World");
     model->color = (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 1}};
 

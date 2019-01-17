@@ -65,7 +65,6 @@ void mrfont_string_draw(int x, int y, char const *str)
             int right = FT_Get_Char_Index(face, (int)str[i+1]);
             FT_Get_Kerning(face, left, right, FT_KERNING_DEFAULT, &kerning);
             x += kerning.x >> 7;
-            printf("Kerning between %c and %c is %d\n", str[i], str[i+1], (int)kerning.x);
         }
         glDeleteTextures(1, &texture);
     }
