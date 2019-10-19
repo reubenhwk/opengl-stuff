@@ -88,6 +88,7 @@ int main(void)
         glfwSwapBuffers(window);
 
         /* Poll for and process events */
+        glfwWaitEventsTimeout(1);
         glfwPollEvents();
 
         ++frames;
