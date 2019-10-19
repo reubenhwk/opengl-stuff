@@ -15,8 +15,31 @@ void model_draw_text(int x, int y, char const *str)
     mrfont_string_draw(x, y, str);
 }
 
+void model_draw_polyline(struct model_polyline const * polyline)
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-1, 1, -1, 1, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1, 1, 1);
+    glBegin(GL_LINES);
+    for (int i = 0; i < polyline->point_count; ++i) {
+        struct tuple3f const * point = &polyline->points[i];
+        glVertex3f(point->xyz.x, point->xyz.y, point->xyz.z);
+    }
+    glEnd();
+}
+
 void model_draw(struct model const * model)
 {
+    for (int i = 0; i < model->polyline_count; ++i) {
+        struct model_polyline * polyline = model->polylines[i];
+        model_draw_polyline(polyline);
+    }
+ 
     for (int i = 0; i < model->text_count; ++i) {
         struct model_text * text = &model->text[i];
         model_draw_text(text->x, text->y, text->str);
@@ -41,6 +64,16 @@ int main(void)
     model_insert_submodel(model, text2);
     model_insert_text(model, 10, 100, "Hello World");
     model->color = (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 1}};
+
+    float z = .5;
+    struct tuple3f points[] = {
+	    {.xyz = {0, 0, z}},
+	    {.xyz = {1, 1, z}},
+	    {.xyz = {0, 1, z}},
+	    {.xyz = {1, 0, z}},
+	    {.xyz = {0, 0, z}},
+    };
+    model_insert_polyline(model, points, 5);
 
     GLFWwindow* window;
 
@@ -89,7 +122,6 @@ int main(void)
 
         /* Poll for and process events */
         glfwWaitEventsTimeout(1);
-        glfwPollEvents();
 
         ++frames;
 

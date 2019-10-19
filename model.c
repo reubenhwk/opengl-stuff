@@ -41,14 +41,11 @@ void model_insert_text(struct model * model, int x, int y, char const *str)
     }
 
     model->text = text;
-
     model->text[model->text_count++] = (struct model_text) {
         .x = x,
         .y = y,
         .str = newstr,
     };
-
-    newstr = NULL;
 
     return /* SUCCESS */;
 out:
@@ -58,11 +55,50 @@ out:
     return /* ERROR */;
 }
 
+void model_insert_polyline(struct model * model, struct tuple3f * points, size_t point_count)
+{
+    struct model_polyline * polyline = malloc(sizeof(struct model_polyline));
+
+    if (!polyline) {
+        goto out;
+    }
+
+    polyline->points = malloc(sizeof(struct tuple3f) * point_count);
+
+    if (!polyline->points) {
+        goto out;
+    }
+
+    memcpy(polyline->points, points, sizeof(struct tuple3f) * point_count);
+    polyline->point_count = point_count;
+
+    struct model_polyline ** polylines = realloc(model->polylines, (model->polyline_count + 1) * sizeof(struct model_polyline));
+
+    if (!polylines) {
+        goto out;
+    }
+
+    model->polylines = polylines;
+    model->polylines[model->polyline_count++] = polyline;
+
+    return /* SUCCESS */;
+out:
+    if (polyline) {
+        free(polyline->points);
+        free(polyline);
+    }
+
+    return /* ERROR */;
+}
+
 void free_model(struct model * model)
 {
     for (int i = 0; i < model->text_count; ++i) {
         struct model_text * text = &model->text[i];
         free(text->str);
+    }
+
+    for (int i = 0; i < model->polyline_count; ++i) {
     }
 
     for (int i = 0; i < model->submodel_count; ++i) {
