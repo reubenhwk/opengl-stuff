@@ -11,6 +11,17 @@ struct model * new_model(void)
     return retval;
 }
 
+void model_set_projection(struct model * model, struct ortho_projection const * projection)
+{
+    model->projection = true;
+    model->ortho_projection = *projection;
+}
+
+void model_set_transform(struct model * model)
+{
+    model->transform = true;
+}
+
 void model_insert_submodel(struct model * model, struct model * submodel)
 {
     struct model ** submodels = realloc(model->submodels, (model->submodel_count + 1) * sizeof(struct model*));

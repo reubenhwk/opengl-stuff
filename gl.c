@@ -17,13 +17,6 @@ void model_draw_text(int x, int y, char const *str)
 
 void model_draw_polyline(struct model_polyline const * polyline)
 {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-1, 1, -1, 1, -1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
     glColor3f(1, 1, 1);
     glBegin(GL_LINES);
     for (int i = 0; i < polyline->point_count; ++i) {
@@ -35,6 +28,26 @@ void model_draw_polyline(struct model_polyline const * polyline)
 
 void model_draw(struct model const * model)
 {
+    if (model->projection) {
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        glOrtho(
+            model->ortho_projection.left,
+            model->ortho_projection.right,
+            model->ortho_projection.bottom,
+            model->ortho_projection.top,
+            model->ortho_projection.front,
+            model->ortho_projection.back
+        );
+    }
+
+    if (model->transform) {
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+    }
+
     for (int i = 0; i < model->polyline_count; ++i) {
         struct model_polyline * polyline = model->polylines[i];
         model_draw_polyline(polyline);
@@ -47,6 +60,16 @@ void model_draw(struct model const * model)
 
     for (int i = 0; i < model->submodel_count; ++i) {
         model_draw(model->submodels[i]);
+    }
+
+    if (model->transform) {
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+    }
+
+    if (model->projection) {
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
     }
 }
 
@@ -65,15 +88,20 @@ int main(void)
     model_insert_text(model, 10, 100, "Hello World");
     model->color = (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 1}};
 
+    struct model * lines = new_model();
     float z = .5;
     struct tuple3f points[] = {
-	    {.xyz = {0, 0, z}},
-	    {.xyz = {1, 1, z}},
-	    {.xyz = {0, 1, z}},
-	    {.xyz = {1, 0, z}},
-	    {.xyz = {0, 0, z}},
+        {.xyz = {0, 0, z}},
+        {.xyz = {1, 1, z}},
+        {.xyz = {0, 1, z}},
+        {.xyz = {1, 0, z}},
+        {.xyz = {0, 0, z}},
     };
-    model_insert_polyline(model, points, 5);
+    model_insert_polyline(lines, points, 5);
+    struct ortho_projection projection = {-1.1, 1.1, -1.1, 1.1, -1.1, 1.1};
+    model_set_projection(lines, &projection);
+    model_set_transform(lines);
+    model_insert_submodel(model, lines);
 
     GLFWwindow* window;
 
