@@ -12,7 +12,7 @@ LIBS+=$(shell pkg-config --libs freetype2)
 
 all: $(TARGETS)
 
-gl: gl.o mrfont.o model.o
+gl: gl.o mrfont.o model.o draw.o
 	$(CC) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 %.o: %.c
