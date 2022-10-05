@@ -1,4 +1,6 @@
 
+# sudo apt install libglfw3-dev libfreetype-dev pkgconf
+
 .PHONY: clean
 
 TARGETS=gl
