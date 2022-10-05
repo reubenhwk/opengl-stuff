@@ -52,6 +52,7 @@ struct model {
     struct model_polyline **polylines;
     int polyline_count;
 
+    bool has_color;
     struct tuple3f color;
 };
 
@@ -62,3 +63,4 @@ void model_insert_polyline(struct model * model, struct tuple3f * points, size_t
 void model_insert_submodel(struct model * model, struct model * submodel);
 void model_set_projection(struct model * model, struct ortho_projection const * ortho_projection);
 void model_set_transform(struct model * model);
+void model_set_color(struct model * model, struct tuple3f color);

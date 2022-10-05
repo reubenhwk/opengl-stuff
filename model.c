@@ -102,6 +102,12 @@ out:
     return /* ERROR */;
 }
 
+void model_set_color(struct model * model, struct tuple3f color)
+{
+    model->has_color = true;
+    model->color = color;
+}
+
 void free_model(struct model * model)
 {
     for (int i = 0; i < model->text_count; ++i) {

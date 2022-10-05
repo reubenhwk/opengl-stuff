@@ -17,7 +17,6 @@ void model_draw_text(int x, int y, char const *str)
 
 void model_draw_polyline(struct model_polyline const * polyline)
 {
-    glColor3f(1, 1, 1);
     glBegin(GL_LINE_STRIP);
     for (int i = 0; i < polyline->point_count; ++i) {
         struct tuple3f const * point = &polyline->points[i];
@@ -48,6 +47,11 @@ void model_draw(struct model const * model)
         glLoadIdentity();
     }
 
+    if (model->has_color) {
+	glPushAttrib(GL_CURRENT_BIT);
+        glColor3f(model->color.rgb.r, model->color.rgb.g, model->color.rgb.b);
+    }
+
     for (int i = 0; i < model->polyline_count; ++i) {
         struct model_polyline * polyline = model->polylines[i];
         model_draw_polyline(polyline);
@@ -60,6 +64,10 @@ void model_draw(struct model const * model)
 
     for (int i = 0; i < model->submodel_count; ++i) {
         model_draw(model->submodels[i]);
+    }
+
+    if (model->has_color) {
+	glPopAttrib();
     }
 
     if (model->transform) {

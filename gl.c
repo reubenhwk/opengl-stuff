@@ -23,22 +23,50 @@ int main(void)
     model_insert_submodel(model, text1);
     model_insert_submodel(model, text2);
     model_insert_text(model, 10, 100, "Hello World");
-    model->color = (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 1}};
 
-    struct model * lines = new_model();
+    struct model * lines1 = new_model();
     float z = .5;
-    struct tuple3f points[] = {
+    struct tuple3f points1[] = {
         {.xyz = {0, 0, z}},
         {.xyz = {1, 1, z}},
         {.xyz = {0, 1, z}},
         {.xyz = {1, 0, z}},
         {.xyz = {0, 0, z}},
     };
-    model_insert_polyline(lines, points, 5);
+    model_insert_polyline(lines1, points1, 5);
     struct ortho_projection projection = {-1.1, 1.1, -1.1, 1.1, -1.1, 1.1};
-    model_set_projection(lines, &projection);
-    model_set_transform(lines);
-    model_insert_submodel(model, lines);
+    model_set_projection(lines1, &projection);
+    model_set_transform(lines1);
+    model_insert_submodel(model, lines1);
+    model_set_color(lines1, (struct tuple3f) {.rgb = {.r = 1, .g = 0, .b = 1}});
+
+    struct model * lines2 = new_model();
+    struct tuple3f points2[] = {
+        {.xyz = {0, -1, z}},
+        {.xyz = {1, 0, z}},
+        {.xyz = {0, 0, z}},
+        {.xyz = {1, -1, z}},
+        {.xyz = {0, -1, z}},
+    };
+    model_insert_polyline(lines2, points2, 5);
+    model_set_projection(lines2, &projection);
+    model_set_transform(lines2);
+    model_insert_submodel(model, lines2);
+    model_set_color(lines2, (struct tuple3f) {.rgb = {.r = 0, .g = 1, .b = 1}});
+
+    struct model * lines3 = new_model();
+    struct tuple3f points3[] = {
+        {.xyz = {-1, -1, z}},
+        {.xyz = {0, 0, z}},
+        {.xyz = {-1, 0, z}},
+        {.xyz = {0, -1, z}},
+        {.xyz = {-1, -1, z}},
+    };
+    model_insert_polyline(lines3, points3, 5);
+    model_set_projection(lines3, &projection);
+    model_set_transform(lines3);
+    model_insert_submodel(model, lines3);
+    model_set_color(lines3, (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 0}});
 
     GLFWwindow* window;
 
