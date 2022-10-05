@@ -116,12 +116,17 @@ void free_model(struct model * model)
     }
 
     for (int i = 0; i < model->polyline_count; ++i) {
+        free(model->polylines[i]->points);
+        free(model->polylines[i]);
     }
 
     for (int i = 0; i < model->submodel_count; ++i) {
-        free(model->submodels[i]);
+        free_model(model->submodels[i]);
     }
 
+    free(model->text);
+    free(model->polylines);
+    free(model->submodels);
     free(model);
 }
 

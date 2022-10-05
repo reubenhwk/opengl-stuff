@@ -131,6 +131,8 @@ int main(void)
         } 
     }
 
+    glfwDestroyWindow(window);
+
     glfwTerminate();
 
     free_model(model);
