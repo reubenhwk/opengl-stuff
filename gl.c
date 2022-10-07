@@ -36,7 +36,6 @@ int main(void)
     model_insert_polyline(lines1, points1, 5);
     struct ortho_projection projection = {-1.1, 1.1, -1.1, 1.1, -1.1, 1.1};
     model_set_projection(lines1, &projection);
-    model_set_transform(lines1);
     model_insert_submodel(model, lines1);
     model_set_color(lines1, (struct tuple3f) {.rgb = {.r = 1, .g = 0, .b = 1}});
 
@@ -50,7 +49,6 @@ int main(void)
     };
     model_insert_polyline(lines2, points2, 5);
     model_set_projection(lines2, &projection);
-    model_set_transform(lines2);
     model_insert_submodel(model, lines2);
     model_set_color(lines2, (struct tuple3f) {.rgb = {.r = 0, .g = 1, .b = 1}});
 
@@ -64,9 +62,9 @@ int main(void)
     };
     model_insert_polyline(lines3, points3, 5);
     model_set_projection(lines3, &projection);
-    model_set_transform(lines3);
     model_insert_submodel(model, lines3);
     model_set_color(lines3, (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 0}});
+    model_translate(lines3, (struct tuple3f) {.xyz= {.x = 0.5, .y = 0.5, .z = 0}});
 
     GLFWwindow* window;
 
@@ -103,6 +101,7 @@ int main(void)
     int frames = 0;
     clock_gettime(CLOCK_MONOTONIC, &start);
     /* Loop until the user closes the window */
+    double x = 0, y = 0;
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
@@ -129,6 +128,11 @@ int main(void)
             start = end;
             frames = 0;
         } 
+    	model_rotate(lines1, (struct tuple3f) {.xyz = {.x = x, .y = y, .z = 0}});
+    	model_rotate(lines2, (struct tuple3f) {.xyz = {.x = -x, .y = y, .z = 0}});
+    	model_rotate(lines3, (struct tuple3f) {.xyz = {.x = x, .y = -y, .z = 0}});
+	x += 0.1;
+	y += 0.1;
     }
 
     glfwDestroyWindow(window);

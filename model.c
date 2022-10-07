@@ -17,11 +17,6 @@ void model_set_projection(struct model * model, struct ortho_projection const * 
     model->ortho_projection = *projection;
 }
 
-void model_set_transform(struct model * model)
-{
-    model->transform = true;
-}
-
 void model_insert_submodel(struct model * model, struct model * submodel)
 {
     struct model ** submodels = realloc(model->submodels, (model->submodel_count + 1) * sizeof(struct model*));
@@ -106,6 +101,18 @@ void model_set_color(struct model * model, struct tuple3f color)
 {
     model->has_color = true;
     model->color = color;
+}
+
+void model_translate(struct model * model, struct tuple3f t)
+{
+    model->translate = true;
+    model->translation = t;
+}
+
+void model_rotate(struct model * model, struct tuple3f r)
+{
+    model->rotate = true;
+    model->rotation = r;
 }
 
 void free_model(struct model * model)

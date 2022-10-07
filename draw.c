@@ -41,10 +41,23 @@ void model_draw(struct model const * model)
         );
     }
 
-    if (model->transform) {
+    /*
+     * TODO: Have a matrix and make the model_translate/model_rotate function
+     * apply their operations to the matrix, then just apply the matrix here
+     * so that each submodel inherites its parents translation/rotations.
+     */
+    if (model->translate) {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glLoadIdentity();
+        glTranslatef(model->translation.xyz.x, model->translation.xyz.x, model->translation.xyz.x);
+    }
+
+    if (model->rotate) {
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+        glRotatef(model->rotation.xyz.x, model->rotation.xyz.x, model->rotation.xyz.x, 1);
     }
 
     if (model->has_color) {
@@ -70,7 +83,12 @@ void model_draw(struct model const * model)
 	glPopAttrib();
     }
 
-    if (model->transform) {
+    if (model->rotate) {
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+    }
+
+    if (model->translate) {
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
     }
