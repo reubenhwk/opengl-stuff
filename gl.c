@@ -10,6 +10,46 @@
 
 #include <GLFW/glfw3.h>
 
+static double mouse_x = 0;
+static double mouse_y = 0;
+
+static void mouse_pos_callback(GLFWwindow *window, double x, double y)
+{
+    mouse_x = x;
+    mouse_y = y;
+}
+
+static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+        if (action == GLFW_PRESS) {
+            printf("right down click: (%g, %g)\n", mouse_x, mouse_y);
+        } else if (action == GLFW_RELEASE) {
+            printf("right up click: (%g, %g)\n", mouse_x, mouse_y);
+        } else {
+            printf("right unknown: (%g, %g)\n", mouse_x, mouse_y);
+        }
+    } else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+        if (action == GLFW_PRESS) {
+            printf("middle down click: (%g, %g)\n", mouse_x, mouse_y);
+        } else if (action == GLFW_RELEASE) {
+            printf("middle up click: (%g, %g)\n", mouse_x, mouse_y);
+        } else {
+            printf("middle unknown: (%g, %g)\n", mouse_x, mouse_y);
+        }
+    } else if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        if (action == GLFW_PRESS) {
+            printf("left down click: (%g, %g)\n", mouse_x, mouse_y);
+        } else if (action == GLFW_RELEASE) {
+            printf("left up click: (%g, %g)\n", mouse_x, mouse_y);
+        } else {
+            printf("left unknown: (%g, %g)\n", mouse_x, mouse_y);
+        }
+    } else {
+        printf("unknown unknown: (%g, %g)\n", mouse_x, mouse_y);
+    }
+}
+
 int main(void)
 {
     struct model * text1 = new_model();
@@ -79,6 +119,10 @@ int main(void)
         glfwTerminate();
         return -1;
     }
+
+    /* Setup some mouse related callbacks... */
+    glfwSetCursorPosCallback(window, mouse_pos_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
