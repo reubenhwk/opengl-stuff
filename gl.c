@@ -175,8 +175,8 @@ int main(void)
     	model_rotate(lines1, (struct tuple3f) {.xyz = {.x = x, .y = y, .z = 0}});
     	model_rotate(lines2, (struct tuple3f) {.xyz = {.x = -x, .y = y, .z = 0}});
     	model_rotate(lines3, (struct tuple3f) {.xyz = {.x = x, .y = -y, .z = 0}});
-	x += 0.1;
-	y += 0.1;
+        x += 0.1;
+        y += 0.1;
     }
 
     glfwDestroyWindow(window);
