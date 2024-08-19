@@ -10,43 +10,45 @@
 
 #include <GLFW/glfw3.h>
 
+static int window_x = 640;
+static int window_y = 480;
 static double mouse_x = 0;
 static double mouse_y = 0;
+
+void do_select(int x, int y)
+{
+    float r, g, b;
+    glReadPixels(x, y, 1, 1, GL_RED, GL_FLOAT, &r);
+    glReadPixels(x, y, 1, 1, GL_GREEN, GL_FLOAT, &g);
+    glReadPixels(x, y, 1, 1, GL_BLUE, GL_FLOAT, &b);
+    printf("select: (%d, %d) (%g, %g, %g)\n", x, y, r, g, b);
+}
 
 static void mouse_pos_callback(GLFWwindow *window, double x, double y)
 {
     mouse_x = x;
-    mouse_y = y;
+    mouse_y = window_y - y;
+    do_select(mouse_x, mouse_y);
 }
 
 static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
         if (action == GLFW_PRESS) {
-            printf("right down click: (%g, %g)\n", mouse_x, mouse_y);
+            do_select(mouse_x, mouse_y);
         } else if (action == GLFW_RELEASE) {
-            printf("right up click: (%g, %g)\n", mouse_x, mouse_y);
         } else {
-            printf("right unknown: (%g, %g)\n", mouse_x, mouse_y);
+        }
+    } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+        if (action == GLFW_PRESS) {
+        } else if (action == GLFW_RELEASE) {
+        } else {
         }
     } else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
         if (action == GLFW_PRESS) {
-            printf("middle down click: (%g, %g)\n", mouse_x, mouse_y);
         } else if (action == GLFW_RELEASE) {
-            printf("middle up click: (%g, %g)\n", mouse_x, mouse_y);
         } else {
-            printf("middle unknown: (%g, %g)\n", mouse_x, mouse_y);
         }
-    } else if (button == GLFW_MOUSE_BUTTON_LEFT) {
-        if (action == GLFW_PRESS) {
-            printf("left down click: (%g, %g)\n", mouse_x, mouse_y);
-        } else if (action == GLFW_RELEASE) {
-            printf("left up click: (%g, %g)\n", mouse_x, mouse_y);
-        } else {
-            printf("left unknown: (%g, %g)\n", mouse_x, mouse_y);
-        }
-    } else {
-        printf("unknown unknown: (%g, %g)\n", mouse_x, mouse_y);
     }
 }
 
@@ -113,7 +115,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(window_x, window_y, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -172,11 +174,11 @@ int main(void)
             start = end;
             frames = 0;
         } 
-    	model_rotate(lines1, (struct tuple3f) {.xyz = {.x = x, .y = y, .z = 0}});
-    	model_rotate(lines2, (struct tuple3f) {.xyz = {.x = -x, .y = y, .z = 0}});
-    	model_rotate(lines3, (struct tuple3f) {.xyz = {.x = x, .y = -y, .z = 0}});
-        x += 0.1;
-        y += 0.1;
+    	//model_rotate(lines1, (struct tuple3f) {.xyz = {.x = x, .y = y, .z = 0}});
+    	//model_rotate(lines2, (struct tuple3f) {.xyz = {.x = -x, .y = y, .z = 0}});
+    	//model_rotate(lines3, (struct tuple3f) {.xyz = {.x = x, .y = -y, .z = 0}});
+        //x += 0.1;
+        //y += 0.1;
     }
 
     glfwDestroyWindow(window);
