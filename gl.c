@@ -26,8 +26,8 @@ void do_select(int x, int y)
 
 static void mouse_pos_callback(GLFWwindow *window, double x, double y)
 {
-    mouse_x = x;
-    mouse_y = window_y - y;
+    mouse_x = x - 1;
+    mouse_y = window_y - y - 1;
     do_select(mouse_x, mouse_y);
 }
 
