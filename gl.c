@@ -71,12 +71,11 @@ int main(void)
     float z = .5;
     struct tuple3f points1[] = {
         {.xyz = {0, 0, z}},
-        {.xyz = {1, 1, z}},
-        {.xyz = {0, 1, z}},
         {.xyz = {1, 0, z}},
-        {.xyz = {0, 0, z}},
+        {.xyz = {0, 1, z}},
+        {.xyz = {1, 1, z}},
     };
-    model_insert_polyline(lines1, points1, 5);
+    model_insert_polyline(lines1, GL_TRIANGLE_STRIP, points1, 4);
     model_set_color(lines1, (struct tuple3f) {.rgb = {.r = 1, .g = 0, .b = 1}});
     model_insert_submodel(model, lines1);
 
@@ -88,7 +87,7 @@ int main(void)
         {.xyz = {1, -1, z}},
         {.xyz = {0, -1, z}},
     };
-    model_insert_polyline(lines2, points2, 5);
+    model_insert_polyline(lines2, GL_LINES, points2, 5);
     model_set_color(lines2, (struct tuple3f) {.rgb = {.r = 0, .g = 1, .b = 1}});
     model_insert_submodel(model, lines2);
 
@@ -100,7 +99,7 @@ int main(void)
         {.xyz = {0, -1, z}},
         {.xyz = {-1, -1, z}},
     };
-    model_insert_polyline(lines3, points3, 5);
+    model_insert_polyline(lines3, GL_LINES, points3, 5);
     model_set_color(lines3, (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 0}});
     model_translate(lines3, (struct tuple3f) {.xyz= {.x = 0.5, .y = 0.5, .z = 0}});
     model_insert_submodel(model, lines3);

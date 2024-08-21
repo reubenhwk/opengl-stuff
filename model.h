@@ -39,6 +39,7 @@ struct model_marker {
 struct model_polyline {
     struct tuple3f * points;
     int point_count;
+    int mode;
 };
 
 struct model {
@@ -72,7 +73,7 @@ void free_model(struct model * model);
 
 void model_insert_marker(struct model * model, struct tuple3f point);
 void model_insert_text(struct model * model, int x, int y, char const * str);
-void model_insert_polyline(struct model * model, struct tuple3f const * points, size_t point_count);
+void model_insert_polyline(struct model * model, int mode, struct tuple3f const * points, size_t point_count);
 void model_insert_submodel(struct model * model, struct model * submodel);
 
 void model_set_color(struct model * model, struct tuple3f color);

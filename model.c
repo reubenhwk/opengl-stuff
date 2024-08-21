@@ -80,7 +80,7 @@ out:
     return /* ERROR */;
 }
 
-void model_insert_polyline(struct model * model, struct tuple3f const * points, size_t point_count)
+void model_insert_polyline(struct model * model, int mode, struct tuple3f const * points, size_t point_count)
 {
     struct model_polyline * polyline = malloc(sizeof(struct model_polyline));
 
@@ -96,6 +96,7 @@ void model_insert_polyline(struct model * model, struct tuple3f const * points, 
 
     memcpy(polyline->points, points, sizeof(struct tuple3f) * point_count);
     polyline->point_count = point_count;
+    polyline->mode = mode;
 
     struct model_polyline ** polylines = realloc(model->polylines, (model->polyline_count + 1) * sizeof(struct model_polyline));
 

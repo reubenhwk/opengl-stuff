@@ -17,7 +17,7 @@ void model_draw_text(int x, int y, char const *str)
 
 void model_draw_polyline(struct model_polyline const * polyline)
 {
-    glBegin(GL_LINES);
+    glBegin(polyline->mode);
     for (int i = 0; i < polyline->point_count; ++i) {
         struct tuple3f const * point = &polyline->points[i];
         glVertex3f(point->xyz.x, point->xyz.y, point->xyz.z);
