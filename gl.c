@@ -55,17 +55,17 @@ static void mouse_button_callback(GLFWwindow *window, int button, int action, in
 
 int main(void)
 {
-    struct model * text1 = new_model();
-    model_insert_text(text1, 10, 175, "BRAVO");
-
-    struct model * text2 = new_model();
-    model_insert_text(text2, 10, 200, "Hello World!!!");
-    model_insert_text(text2, 10, 150, "Hello World");
-
     struct model * model = new_model();
+    struct ortho_projection projection = {-1.1, 1.1, -1.1, 1.1, -1.1, 1.1};
+    model_set_projection(model, &projection);
+
+    struct model * text1 = new_model();
+    model_insert_text(text1, 10, 100, "Hello World");
+    model_insert_text(text1, 10, 150, "Hello World");
+    model_insert_text(text1, 10, 175, "BRAVO");
+    model_insert_text(text1, 10, 200, "Hello World!!!");
+
     model_insert_submodel(model, text1);
-    model_insert_submodel(model, text2);
-    model_insert_text(model, 10, 100, "Hello World");
 
     struct model * lines1 = new_model();
     float z = .5;
@@ -77,10 +77,8 @@ int main(void)
         {.xyz = {0, 0, z}},
     };
     model_insert_polyline(lines1, points1, 5);
-    struct ortho_projection projection = {-1.1, 1.1, -1.1, 1.1, -1.1, 1.1};
-    model_set_projection(lines1, &projection);
-    model_insert_submodel(model, lines1);
     model_set_color(lines1, (struct tuple3f) {.rgb = {.r = 1, .g = 0, .b = 1}});
+    model_insert_submodel(model, lines1);
 
     struct model * lines2 = new_model();
     struct tuple3f points2[] = {
@@ -91,9 +89,8 @@ int main(void)
         {.xyz = {0, -1, z}},
     };
     model_insert_polyline(lines2, points2, 5);
-    model_set_projection(lines2, &projection);
-    model_insert_submodel(model, lines2);
     model_set_color(lines2, (struct tuple3f) {.rgb = {.r = 0, .g = 1, .b = 1}});
+    model_insert_submodel(model, lines2);
 
     struct model * lines3 = new_model();
     struct tuple3f points3[] = {
@@ -104,22 +101,19 @@ int main(void)
         {.xyz = {-1, -1, z}},
     };
     model_insert_polyline(lines3, points3, 5);
-    model_set_projection(lines3, &projection);
-    model_insert_submodel(model, lines3);
     model_set_color(lines3, (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 0}});
     model_translate(lines3, (struct tuple3f) {.xyz= {.x = 0.5, .y = 0.5, .z = 0}});
+    model_insert_submodel(model, lines3);
 
     /*
      * TODO: The coordinates of these markers and where they wind up gettin
      * drawn on the window do not make sense.
      */
-    struct model * markers = new_model();
-    for (float x = -100; x <= 100; x += 10) {
-        for (float y = -100; y <= 100; y += 10) {
-            model_insert_marker(markers, (struct tuple3f){x, y, -0.5});
+    for (float x = -1; x <= 1; x += .10) {
+        for (float y = -1; y <= 1; y += .10) {
+            model_insert_marker(model, (struct tuple3f){x, y, -0.5});
         }
     }
-    model_insert_submodel(model, markers);
 
     GLFWwindow* window;
 
