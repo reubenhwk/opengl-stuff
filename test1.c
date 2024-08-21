@@ -20,7 +20,7 @@ int main(void)
         {.xyz = {0, 0, 0}},
         {.xyz = {1, 0, 0}},
     };
-    model_insert_polyline(model, points1, 2);
+    model_insert_polyline(model, GL_LINES, points1, 2);
 
     GLFWwindow* window;
 
