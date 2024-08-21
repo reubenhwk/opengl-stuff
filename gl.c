@@ -141,6 +141,7 @@ int main(void)
     );
 
     glClearColor(0, 0, 0, 0);
+    glClearDepth(0);
 
     struct timespec start, end;
 
@@ -151,7 +152,7 @@ int main(void)
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 
         model_draw(model);
 
