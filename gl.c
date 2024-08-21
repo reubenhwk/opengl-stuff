@@ -109,14 +109,16 @@ int main(void)
     model_set_color(lines3, (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 0}});
     model_translate(lines3, (struct tuple3f) {.xyz= {.x = 0.5, .y = 0.5, .z = 0}});
 
+    /*
+     * TODO: The coordinates of these markers and where they wind up gettin
+     * drawn on the window do not make sense.
+     */
     struct model * markers = new_model();
-    for (float x = -1; x <= 1; x += 1.0/8.0) {
-        for (float y = -1; y <= 1; y += 1.0/8.0) {
-            model_insert_marker(markers, (struct tuple3f){x, y, 0});
+    for (float x = -100; x <= 100; x += 10) {
+        for (float y = -100; y <= 100; y += 10) {
+            model_insert_marker(markers, (struct tuple3f){x, y, -0.5});
         }
     }
-    struct ortho_projection marker_projection = {-1, 1, -1, 1, -1, 1};
-    //model_set_projection(markers, &marker_projection);
     model_insert_submodel(model, markers);
 
     GLFWwindow* window;
