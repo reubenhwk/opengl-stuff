@@ -61,7 +61,7 @@ void model_draw(struct model const * model)
     }
 
     if (model->has_color) {
-	glPushAttrib(GL_CURRENT_BIT);
+        glPushAttrib(GL_CURRENT_BIT);
         glColor3f(model->color.rgb.r, model->color.rgb.g, model->color.rgb.b);
     }
 
@@ -80,7 +80,7 @@ void model_draw(struct model const * model)
     }
 
     if (model->has_color) {
-	glPopAttrib();
+        glPopAttrib();
     }
 
     if (model->rotate) {
