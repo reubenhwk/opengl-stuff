@@ -61,7 +61,26 @@ out:
     return /* ERROR */;
 }
 
-void model_insert_polyline(struct model * model, struct tuple3f * points, size_t point_count)
+void model_insert_marker(struct model * model, struct tuple3f point)
+{
+    struct model_marker * markers = realloc(model->markers, (model->marker_count + 1) * sizeof(struct model_marker));
+
+    if (!markers) {
+        goto out;
+    }
+
+    model->markers = markers;
+    model->markers[model->marker_count++] = (struct model_marker) {
+        .point = point,
+    };
+
+    return /* SUCCESS */;
+out:
+
+    return /* ERROR */;
+}
+
+void model_insert_polyline(struct model * model, struct tuple3f const * points, size_t point_count)
 {
     struct model_polyline * polyline = malloc(sizeof(struct model_polyline));
 
@@ -132,6 +151,7 @@ void free_model(struct model * model)
     }
 
     free(model->text);
+    free(model->markers);
     free(model->polylines);
     free(model->submodels);
     free(model);

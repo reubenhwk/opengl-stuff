@@ -17,18 +17,19 @@ static double mouse_y = 0;
 
 void do_select(int x, int y)
 {
+    float z;
+    glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
     float r, g, b;
     glReadPixels(x, y, 1, 1, GL_RED, GL_FLOAT, &r);
     glReadPixels(x, y, 1, 1, GL_GREEN, GL_FLOAT, &g);
     glReadPixels(x, y, 1, 1, GL_BLUE, GL_FLOAT, &b);
-    printf("select: (%d, %d) (%g, %g, %g)\n", x, y, r, g, b);
+    printf("select: (%d, %d, %g) (%g, %g, %g)\n", x, y, z, r, g, b);
 }
 
 static void mouse_pos_callback(GLFWwindow *window, double x, double y)
 {
     mouse_x = x - 1;
     mouse_y = window_y - y - 1;
-    do_select(mouse_x, mouse_y);
 }
 
 static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
@@ -108,6 +109,16 @@ int main(void)
     model_set_color(lines3, (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 0}});
     model_translate(lines3, (struct tuple3f) {.xyz= {.x = 0.5, .y = 0.5, .z = 0}});
 
+    struct model * markers = new_model();
+    for (float x = -1; x <= 1; x += 1.0/8.0) {
+        for (float y = -1; y <= 1; y += 1.0/8.0) {
+            model_insert_marker(markers, (struct tuple3f){x, y, 0});
+        }
+    }
+    struct ortho_projection marker_projection = {-1, 1, -1, 1, -1, 1};
+    //model_set_projection(markers, &marker_projection);
+    model_insert_submodel(model, markers);
+
     GLFWwindow* window;
 
     /* Initialize the library */
@@ -116,8 +127,7 @@ int main(void)
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(window_x, window_y, "Hello World", NULL, NULL);
-    if (!window)
-    {
+    if (!window) {
         glfwTerminate();
         return -1;
     }
@@ -142,7 +152,8 @@ int main(void)
 
     glClearColor(0, 0, 0, 0);
     glClearDepth(0);
-
+    glPointSize(1);
+    glEnable( GL_PROGRAM_POINT_SIZE);
     struct timespec start, end;
 
     int frames = 0;
@@ -170,7 +181,7 @@ int main(void)
             (start.tv_sec * 1000 * 1000 * 1000.0 + start.tv_nsec)) /
             (1000 * 1000 * 1000.0) ;
 
-        if (stopwatch >= 1) {
+        if (0 && stopwatch >= 1) {
             printf("%f fps\n", frames / stopwatch);
             start = end;
             frames = 0;

@@ -65,6 +65,13 @@ void model_draw(struct model const * model)
         glColor3f(model->color.rgb.r, model->color.rgb.g, model->color.rgb.b);
     }
 
+    glBegin(GL_POINTS);
+    for (int i = 0; i < model->marker_count; ++i) {
+        struct model_marker * marker = &model->markers[i];
+        glVertex3f(marker->point.xyz.x, marker->point.xyz.y, marker->point.xyz.z);
+    }
+    glEnd();
+
     for (int i = 0; i < model->polyline_count; ++i) {
         struct model_polyline * polyline = model->polylines[i];
         model_draw_polyline(polyline);
