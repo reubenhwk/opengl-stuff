@@ -121,31 +121,40 @@ GLuint mrfont_glyph_to_texture(FT_Bitmap const *bitmap)
 int mrfont_glyph_draw(int x, int y, FT_GlyphSlot glyph, GLuint texture)
 {
     glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
     glLoadIdentity();
     glOrtho(-10, 630, -10, 470, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
     glLoadIdentity();
     glTranslatef(x, y, 0);
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_TEXTURE_2D); {
+        glBindTexture(GL_TEXTURE_2D, texture);
 
-    float x0 = x + glyph->bitmap_left;
-    float y0 = y - (glyph->bitmap.rows - glyph->bitmap_top);
-    float x1 = x0 + glyph->bitmap.width;
-    float y1 = y0 + glyph->bitmap.rows;
+        float x0 = x + glyph->bitmap_left;
+        float y0 = y - (glyph->bitmap.rows - glyph->bitmap_top);
+        float x1 = x0 + glyph->bitmap.width;
+        float y1 = y0 + glyph->bitmap.rows;
 
-    glBegin(GL_QUADS);{
-        glTexCoord2f(0, 1);
-        glVertex2f(x0, y0);
-        glTexCoord2f(1, 1);
-        glVertex2f(x1, y0);
-        glTexCoord2f(1, 0);
-        glVertex2f(x1, y1);
-        glTexCoord2f(0, 0);
-        glVertex2f(x0, y1);
-    } glEnd();
+        glBegin(GL_QUADS); {
+            glTexCoord2f(0, 1);
+            glVertex2f(x0, y0);
+            glTexCoord2f(1, 1);
+            glVertex2f(x1, y0);
+            glTexCoord2f(1, 0);
+            glVertex2f(x1, y1);
+            glTexCoord2f(0, 0);
+            glVertex2f(x0, y1);
+        } glEnd();
+    } glDisable(GL_TEXTURE_2D);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 
     return glyph->advance.x >> 7;
 }
