@@ -15,7 +15,14 @@ static int window_y = 480;
 static double mouse_x = 0;
 static double mouse_y = 0;
 
-void do_select(int x, int y)
+static void size_callback(GLFWwindow * window, int width, int height)
+{
+    window_x = width;
+    window_y = height;
+    glViewport(0, 0, window_x, window_y);
+}
+
+static void do_select(int x, int y)
 {
     float z;
     glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
@@ -117,6 +124,8 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     window = glfwCreateWindow(window_x, window_y, "Hello World", NULL, NULL);
     if (!window) {
         glfwTerminate();
@@ -124,6 +133,7 @@ int main(void)
     }
 
     /* Setup some mouse related callbacks... */
+    glfwSetWindowSizeCallback(window, size_callback);
     glfwSetCursorPosCallback(window, mouse_pos_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
 
@@ -144,7 +154,7 @@ int main(void)
     glClearColor(0, 0, 0, 0);
     glClearDepth(0);
     glPointSize(1);
-    glEnable( GL_PROGRAM_POINT_SIZE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
     struct timespec start, end;
 
     int frames = 0;
