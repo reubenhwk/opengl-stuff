@@ -104,10 +104,6 @@ int main(void)
     model_translate(lines3, (struct tuple3f) {.xyz= {.x = 0.5, .y = 0.5, .z = 0}});
     model_insert_submodel(model, lines3);
 
-    /*
-     * TODO: The coordinates of these markers and where they wind up gettin
-     * drawn on the window do not make sense.
-     */
     for (float x = -1; x <= 1; x += .10) {
         for (float y = -1; y <= 1; y += .10) {
             model_insert_marker(model, (struct tuple3f){x, y, -0.5});
