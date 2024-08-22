@@ -85,6 +85,7 @@ int main(void)
     model_insert_polyline(lines1, GL_TRIANGLE_STRIP, points1, 4);
     model_set_color(lines1, (struct tuple3f) {.rgb = {.r = 1, .g = 0, .b = 1}});
     model_insert_submodel(model, lines1);
+    model_rotate(lines1, (struct tuple3f){45, 45, 0});
 
     struct model * lines2 = new_model();
     struct tuple3f points2[] = {
@@ -155,12 +156,22 @@ int main(void)
     glClearDepth(0);
     glPointSize(1);
     glEnable(GL_PROGRAM_POINT_SIZE);
+
+    /* TODO: This need to go in the model somehow... */
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    /*
+     * Light is not a posotion, but a direction from which
+     * the light is coming.
+     */
+    GLfloat lightpos[] = {0, 0, 1, 0};
+    glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+
     struct timespec start, end;
 
     int frames = 0;
     clock_gettime(CLOCK_MONOTONIC, &start);
     /* Loop until the user closes the window */
-    double x = 0, y = 0;
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
@@ -187,11 +198,6 @@ int main(void)
             start = end;
             frames = 0;
         } 
-    	//model_rotate(lines1, (struct tuple3f) {.xyz = {.x = x, .y = y, .z = 0}});
-    	//model_rotate(lines2, (struct tuple3f) {.xyz = {.x = -x, .y = y, .z = 0}});
-    	//model_rotate(lines3, (struct tuple3f) {.xyz = {.x = x, .y = -y, .z = 0}});
-        //x += 0.1;
-        //y += 0.1;
     }
 
     glfwDestroyWindow(window);
