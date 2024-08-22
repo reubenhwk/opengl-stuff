@@ -61,7 +61,7 @@ out:
     return /* ERROR */;
 }
 
-void model_insert_marker(struct model * model, struct tuple3f point)
+void model_insert_marker(struct model * model, float x, float y, float z)
 {
     struct model_marker * markers = realloc(model->markers, (model->marker_count + 1) * sizeof(struct model_marker));
 
@@ -71,7 +71,7 @@ void model_insert_marker(struct model * model, struct tuple3f point)
 
     model->markers = markers;
     model->markers[model->marker_count++] = (struct model_marker) {
-        .point = point,
+        .point = {x, y, z},
     };
 
     return /* SUCCESS */;
@@ -117,22 +117,22 @@ out:
     return /* ERROR */;
 }
 
-void model_set_color(struct model * model, struct tuple3f color)
+void model_set_color(struct model * model, float r, float g, float b)
 {
     model->has_color = true;
-    model->color = color;
+    model->color = (struct tuple3f){r, g, b};
 }
 
-void model_translate(struct model * model, struct tuple3f t)
+void model_translate(struct model * model, float x, float y, float z)
 {
     model->translate = true;
-    model->translation = t;
+    model->translation = (struct tuple3f){x, y, z};
 }
 
-void model_rotate(struct model * model, struct tuple3f r)
+void model_rotate(struct model * model, float x, float y, float z)
 {
     model->rotate = true;
-    model->rotation = r;
+    model->rotation = (struct tuple3f){x, y, z};
 }
 
 void free_model(struct model * model)

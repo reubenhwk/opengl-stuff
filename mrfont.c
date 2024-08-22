@@ -7,7 +7,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#define FONT_PATH "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+#define FONT_PATH "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 //#define FONT_PATH "/usr/share/fonts/opentype/stix/STIXGeneral-Regular.otf"
 
 void mrfont_string_draw(int x, int y, char const *str);

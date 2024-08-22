@@ -21,9 +21,6 @@ struct tuple3f {
         struct {
             float x, y, z;
         } xyz;
-        struct {
-            float a, b, c;
-        } abc;
     };
 };
 
@@ -71,12 +68,12 @@ struct model {
 struct model * new_model(void);
 void free_model(struct model * model);
 
-void model_insert_marker(struct model * model, struct tuple3f point);
 void model_insert_text(struct model * model, int x, int y, char const * str);
+void model_insert_marker(struct model * model, float x, float y, float z);
 void model_insert_polyline(struct model * model, int mode, struct tuple3f const * points, size_t point_count);
 void model_insert_submodel(struct model * model, struct model * submodel);
 
-void model_set_color(struct model * model, struct tuple3f color);
+void model_set_color(struct model * model, float r, float g, float b);
 void model_set_projection(struct model * model, struct ortho_projection const * ortho_projection);
-void model_translate(struct model * model, struct tuple3f t);
-void model_rotate(struct model * model, struct tuple3f r);
+void model_translate(struct model * model, float x, float y, float z);
+void model_rotate(struct model * model, float x, float y, float z);

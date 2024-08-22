@@ -77,44 +77,44 @@ int main(void)
     struct model * lines1 = new_model();
     float z = .5;
     struct tuple3f points1[] = {
-        {.xyz = {0, 0, z}},
-        {.xyz = {1, 0, z}},
-        {.xyz = {0, 1, z}},
-        {.xyz = {1, 1, z}},
+        {0, 0, z},
+        {1, 0, z},
+        {0, 1, z},
+        {1, 1, z},
     };
     model_insert_polyline(lines1, GL_TRIANGLE_STRIP, points1, 4);
-    model_set_color(lines1, (struct tuple3f) {.rgb = {.r = 1, .g = 0, .b = 1}});
+    model_set_color(lines1, 1, 0, 1);
     model_insert_submodel(model, lines1);
-    model_rotate(lines1, (struct tuple3f){45, 45, 0});
+    model_rotate(lines1, 45, 45, 0);
 
     struct model * lines2 = new_model();
     struct tuple3f points2[] = {
-        {.xyz = {0, -1, z}},
-        {.xyz = {1, 0, z}},
-        {.xyz = {0, 0, z}},
-        {.xyz = {1, -1, z}},
-        {.xyz = {0, -1, z}},
+        {0, -1, z},
+        {1, 0, z},
+        {0, 0, z},
+        {1, -1, z},
+        {0, -1, z},
     };
     model_insert_polyline(lines2, GL_LINES, points2, 5);
-    model_set_color(lines2, (struct tuple3f) {.rgb = {.r = 0, .g = 1, .b = 1}});
+    model_set_color(lines2, 0, 1, 1);
     model_insert_submodel(model, lines2);
 
     struct model * lines3 = new_model();
     struct tuple3f points3[] = {
-        {.xyz = {-1, -1, z}},
-        {.xyz = {0, 0, z}},
-        {.xyz = {-1, 0, z}},
-        {.xyz = {0, -1, z}},
-        {.xyz = {-1, -1, z}},
+        {-1, -1, z},
+        {0, 0, z},
+        {-1, 0, z},
+        {0, -1, z},
+        {-1, -1, z},
     };
     model_insert_polyline(lines3, GL_LINES, points3, 5);
-    model_set_color(lines3, (struct tuple3f) {.rgb = {.r = 1, .g = 1, .b = 0}});
-    model_translate(lines3, (struct tuple3f) {.xyz= {.x = 0.5, .y = 0.5, .z = 0}});
+    model_set_color(lines3, 1, 1, 0);
+    model_translate(lines3, 0.5, 0.5, 0);
     model_insert_submodel(model, lines3);
 
     for (float x = -1; x <= 1; x += .10) {
         for (float y = -1; y <= 1; y += .10) {
-            model_insert_marker(model, (struct tuple3f){x, y, -0.5});
+            model_insert_marker(model, x, y, -0.5);
         }
     }
 

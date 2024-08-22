@@ -20,7 +20,7 @@ void model_draw_polyline(struct model_polyline const * polyline)
     glBegin(polyline->mode);
     for (int i = 0; i < polyline->point_count; ++i) {
         struct tuple3f const * point = &polyline->points[i];
-        glVertex3f(point->xyz.x, point->xyz.y, point->xyz.z);
+        glVertex3fv((GLfloat const*)point);
     }
     glEnd();
 }
@@ -41,11 +41,6 @@ void model_draw(struct model const * model)
         );
     }
 
-    /*
-     * TODO: Have a matrix and make the model_translate/model_rotate function
-     * apply their operations to the matrix, then just apply the matrix here
-     * so that each submodel inherites its parents translation/rotations.
-     */
     if (model->translate) {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
@@ -62,13 +57,13 @@ void model_draw(struct model const * model)
 
     if (model->has_color) {
         glPushAttrib(GL_CURRENT_BIT);
-        glColor3f(model->color.rgb.r, model->color.rgb.g, model->color.rgb.b);
+        glColor3fv((GLfloat const*)model);
     }
 
     glBegin(GL_POINTS);
     for (int i = 0; i < model->marker_count; ++i) {
         struct model_marker * marker = &model->markers[i];
-        glVertex3f(marker->point.xyz.x, marker->point.xyz.y, marker->point.xyz.z);
+        glVertex3fv((GLfloat const*)marker);
     }
     glEnd();
 
